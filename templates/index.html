@@ -18,31 +18,32 @@
             gap: 2rem;
             padding: 2rem;
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #35042f, #290974);
-            color: #333;
+            background: linear-gradient(135deg, #1f273a, #1f346c);
+            color: #fff;
             min-height: 100vh;
         }
 
         #camera,
         #prediction {
-            background: transparent;
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
             padding: 2rem;
-            border-radius: 1.25rem;
-            box-shadow: 20px 20px 30px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         #camera:hover,
         #prediction:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
         }
 
         h2 {
-            font-size: 2rem;
+            font-size: 2.25rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            color: white;
+            margin-bottom: 1.25rem;
+            color: #ffffff;
         }
 
         video,
@@ -50,36 +51,36 @@
             width: 100%;
             height: 60vh;
             border-radius: 1rem;
-            border: 2px solid whitesmoke;
+            border: 2px solid #ccc;
             margin-top: 1rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
             object-fit: cover;
         }
 
         button {
             margin-top: 1.5rem;
-            padding: 0.85rem 2rem;
+            padding: 0.9rem 2rem;
             font-size: 1rem;
             font-weight: 600;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: #2b4ba2;
             color: #fff;
             border: none;
             border-radius: 0.75rem;
             cursor: pointer;
             width: 100%;
-            transition: background 0.3s ease, transform 0.2s;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
 
         button:hover {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            transform: scale(1.03);
+            background: #2b5de5;
+            transform: scale(1.05);
         }
 
-        #predictionText {
-            font-weight: 600;
-            color: white;
-            text-align: left;
-            transition: color 0.3s, text-align 0.3s;
+        @media (max-width: 768px) {
+            body {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -94,7 +95,7 @@
     <div id="prediction">
         <h2 id="predictionText">Prediction</h2>
         <img id="capturedImage"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="
+            src="https://cdn.shopify.com/s/files/1/0698/3444/0933/files/asl_480x480.jpg?v=1728900909"
             alt="Captured image will appear here">
     </div>
 
@@ -110,7 +111,7 @@
             })
             .catch(err => {
                 console.error("Error accessing webcam: ", err);
-                updatePredictionText("Camera access denied or not supported.");
+                predictionText.innerText = "Camera access denied or not supported.";
             });
 
         function captureImage() {
@@ -133,7 +134,7 @@
                     predictionText.innerText = data.sign_prediction;
                 })
                 .catch(err => {
-                    updatePredictionText("Prediction failed. Try again.");
+                    predictionText.innerText = "Prediction failed. Try again.";
                     console.error("Prediction error:", err);
                 });
         }
