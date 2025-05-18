@@ -31,7 +31,7 @@ class DataPreprocessing:
 
         os.makedirs(self.save_dataset_dir, exist_ok=True)
 
-    def preprocess_train_images(self, max_images_per_class=1000):
+    def preprocess_train_images(self, max_images_per_class=10):
         """
         Preprocesses training images and save them as a TensorDataset.
         """

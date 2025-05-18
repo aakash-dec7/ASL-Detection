@@ -42,7 +42,7 @@ class Training:
         self.scheduler = StepLR(self.optimizer, step_size=5, gamma=0.1)
         logger.info("Optimizer and learning rate scheduler set up successfully.")
 
-    def train(self, num_epochs=25):
+    def train(self, num_epochs=5):
         """
         Trains the model for the specified number of epochs.
         """

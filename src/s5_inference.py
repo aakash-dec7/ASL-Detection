@@ -87,7 +87,7 @@ class Inference:
                 # Convert predicted index to class label
                 predicted_label = self.labels_map.get(predicted_index, "!")
                 logger.info(f"Prediction successful: {predicted_label}")
-                return prediction
+                return predicted_label
             except Exception as e:
                 logger.error("Prediction failed.", exc_info=True)
                 raise RuntimeError("Prediction failed.") from e

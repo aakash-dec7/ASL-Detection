@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Camera Detection & Prediction</title>
+    <title>ASL Detection</title>
     <style>
         * {
             box-sizing: border-box;
@@ -60,18 +60,11 @@
             background-color: #4338ca;
         }
 
-        /* #predictionText {
-            color: #370ddf;
-            text-align: center;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        } */
-
         #predictionText {
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             color: black;
             text-align: left;
             transition: color 0.3s, text-align 0.3s;
-            /* smooth transition */
         }
 
         .purpleRight {
@@ -93,47 +86,6 @@
         <img id="capturedImage" src="" alt="Captured image will appear here">
     </div>
 
-    <!-- <script>
-        const video = document.getElementById('webcam');
-        const predictionText = document.getElementById('predictionText');
-        const capturedImage = document.getElementById('capturedImage');
-
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-                video.onloadedmetadata = () => video.play();
-            })
-            .catch(err => {
-                console.error("Error accessing webcam: ", err);
-                predictionText.innerText = "Camera access denied or not supported.";
-            });
-
-        function captureImage() {
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            const dataURL = canvas.toDataURL('image/png');
-            capturedImage.src = dataURL;
-
-            fetch('/predict', {
-                method: 'POST',
-                body: JSON.stringify({ image: dataURL }),
-                headers: { 'Content-Type': 'application/json' }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    predictionText.innerText = data.label;
-                })
-                .catch(err => {
-                    predictionText.innerText = "Prediction failed. Try again.";
-                    console.error("Prediction error:", err);
-                });
-        }
-    </script> -->
-
     <script>
         const video = document.getElementById('webcam');
         const predictionText = document.getElementById('predictionText');
@@ -149,7 +101,6 @@
                 predictionText.classList.remove('purpleRight');
             }
         }
-
 
         // Access webcam
         navigator.mediaDevices.getUserMedia({ video: true })
@@ -180,7 +131,7 @@
             })
                 .then(res => res.json())
                 .then(data => {
-                    updatePredictionText(data.label);
+                    updatePredictionText(data.sign_prediction);
                 })
                 .catch(err => {
                     updatePredictionText("Prediction failed. Try again.");

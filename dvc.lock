@@ -1,0 +1,90 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/s1_data_ingestion.py
+    deps:
+    - path: src/s1_data_ingestion.py
+      hash: md5
+      md5: 0f1bf45aad8c8b0176531f854c63a989
+      size: 3302
+  data_preprocessing:
+    cmd: python src/s2_data_preprocessing.py
+    deps:
+    - path: src/s1_data_ingestion.py
+      hash: md5
+      md5: 0f1bf45aad8c8b0176531f854c63a989
+      size: 3302
+    - path: src/s2_data_preprocessing.py
+      hash: md5
+      md5: 9d5d494b0ee8f096cae55e96ca0f657e
+      size: 6131
+    outs:
+    - path: artifacts/Preprocessed
+      hash: md5
+      md5: c5924a3bf3beb963a5c4922eeeeccecf.dir
+      size: 191478181
+      nfiles: 3
+  model_training:
+    cmd: python src/s3_model_training.py
+    deps:
+    - path: artifacts/Preprocessed/Train
+      hash: md5
+      md5: f014a06475202edb2c13916e4b3827ec.dir
+      size: 174616613
+      nfiles: 1
+    - path: src/s2_data_preprocessing.py
+      hash: md5
+      md5: 9d5d494b0ee8f096cae55e96ca0f657e
+      size: 6131
+    - path: src/s3_model_training.py
+      hash: md5
+      md5: 4725d510293cea1b355d101f19e0fd70
+      size: 4272
+    outs:
+    - path: artifacts/Metrics/train_metrics.json
+      hash: md5
+      md5: e25003818d7383ee4022b93a3fd8bfc7
+      size: 176
+    - path: artifacts/Model
+      hash: md5
+      md5: 1a4b8a18bd09e8045ed46b8326964abb.dir
+      size: 412601242
+      nfiles: 1
+  model_evaluation:
+    cmd: python src/s4_model_evaluation.py
+    deps:
+    - path: artifacts/Model
+      hash: md5
+      md5: 1a4b8a18bd09e8045ed46b8326964abb.dir
+      size: 412601242
+      nfiles: 1
+    - path: artifacts/Preprocessed/Test
+      hash: md5
+      md5: e89e3581c9f7cef6bd753d3365202618.dir
+      size: 16861157
+      nfiles: 1
+    - path: src/s3_model_training.py
+      hash: md5
+      md5: 4725d510293cea1b355d101f19e0fd70
+      size: 4272
+    - path: src/s4_model_evaluation.py
+      hash: md5
+      md5: 28cdaea81f4be2a7a0c114994ca031f4
+      size: 4269
+    outs:
+    - path: artifacts/Metrics/eval_metrics.json
+      hash: md5
+      md5: c5ab0025e5bbce615d05596ebc98a518
+      size: 76
+  app:
+    cmd: python app.py
+    deps:
+    - path: app.py
+      hash: md5
+      md5: e867facd4f8aa4e3c809b5063146e46b
+      size: 1185
+    - path: artifacts/Model
+      hash: md5
+      md5: 1a4b8a18bd09e8045ed46b8326964abb.dir
+      size: 412601242
+      nfiles: 1

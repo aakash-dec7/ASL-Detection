@@ -31,7 +31,7 @@ def analyze():
         # Predict label
         prediction = inference.predict(image)
 
-        return jsonify({"label": prediction})
+        return jsonify({"sign_prediction": str(prediction)})
 
     except Exception as e:
         logger.error(f"Prediction error: {e}", exc_info=True)
