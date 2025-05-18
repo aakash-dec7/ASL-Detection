@@ -1,0 +1,39 @@
+stages:
+  data_ingestion:
+    cmd: python src/s1_data_ingestion.py
+    deps:
+      - src/s1_data_ingestion.py
+
+  data_preprocessing:
+    cmd: python src/s2_data_preprocessing.py
+    deps:
+      - src/s2_data_preprocessing.py
+      - src/s1_data_ingestion.py
+    outs:
+      - artifacts/Preprocessed
+
+  model_training:
+    cmd: python src/s3_model_training.py
+    deps:
+      - src/s3_model_training.py
+      - src/s2_data_preprocessing.py
+      - artifacts/Preprocessed/Train
+    outs:
+      - artifacts/Model
+      - artifacts/Metrics/train_metrics.json
+
+  model_evaluation:
+    cmd: python src/s4_model_evaluation.py
+    deps:
+      - src/s4_model_evaluation.py
+      - src/s3_model_training.py
+      - artifacts/Preprocessed/Test
+      - artifacts/Model
+    outs:
+      - artifacts/Metrics/eval_metrics.json
+
+  app:
+    cmd: python app.py
+    deps:
+      - app.py
+      - artifacts/Model

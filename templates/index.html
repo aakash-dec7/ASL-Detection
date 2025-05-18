@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Camera Detection & Prediction</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fafafa;
+            color: #333;
+        }
+
+        #camera,
+        #prediction {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-size: 2.0rem;
+            margin-bottom: 1rem;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        video,
+        img {
+            width: 100%;
+            border-radius: 0.75rem;
+            border: 1px solid #ddd;
+            margin-top: 1rem;
+        }
+
+        button {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            background-color: #4f46e5;
+            color: #fff;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #4338ca;
+        }
+
+        /* #predictionText {
+            color: #370ddf;
+            text-align: center;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        } */
+
+        #predictionText {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            color: black;
+            text-align: left;
+            transition: color 0.3s, text-align 0.3s;
+            /* smooth transition */
+        }
+
+        .purpleRight {
+            color: rgb(98, 10, 213) !important;
+            text-align: center !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="camera">
+        <h2>ASL Detection</h2>
+        <video id="webcam" autoplay></video>
+        <button onclick="captureImage()">Capture Image</button>
+    </div>
+
+    <div id="prediction">
+        <h2 id="predictionText">Capture Image</h2>
+        <img id="capturedImage" src="" alt="Captured image will appear here">
+    </div>
+
+    <!-- <script>
+        const video = document.getElementById('webcam');
+        const predictionText = document.getElementById('predictionText');
+        const capturedImage = document.getElementById('capturedImage');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                video.onloadedmetadata = () => video.play();
+            })
+            .catch(err => {
+                console.error("Error accessing webcam: ", err);
+                predictionText.innerText = "Camera access denied or not supported.";
+            });
+
+        function captureImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const dataURL = canvas.toDataURL('image/png');
+            capturedImage.src = dataURL;
+
+            fetch('/predict', {
+                method: 'POST',
+                body: JSON.stringify({ image: dataURL }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    predictionText.innerText = data.label;
+                })
+                .catch(err => {
+                    predictionText.innerText = "Prediction failed. Try again.";
+                    console.error("Prediction error:", err);
+                });
+        }
+    </script> -->
+
+    <script>
+        const video = document.getElementById('webcam');
+        const predictionText = document.getElementById('predictionText');
+        const capturedImage = document.getElementById('capturedImage');
+
+        // Update color and alignment based on content
+        function updatePredictionText(text) {
+            predictionText.innerText = text;
+
+            if (text !== "Capture Image") {
+                predictionText.classList.add('purpleRight');
+            } else {
+                predictionText.classList.remove('purpleRight');
+            }
+        }
+
+
+        // Access webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                video.onloadedmetadata = () => video.play();
+            })
+            .catch(err => {
+                console.error("Error accessing webcam: ", err);
+                updatePredictionText("Camera access denied or not supported.");
+            });
+
+        // Capture image from video and send to server
+        function captureImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const dataURL = canvas.toDataURL('image/png');
+            capturedImage.src = dataURL;
+
+            fetch('/predict', {
+                method: 'POST',
+                body: JSON.stringify({ image: dataURL }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    updatePredictionText(data.label);
+                })
+                .catch(err => {
+                    updatePredictionText("Prediction failed. Try again.");
+                    console.error("Prediction error:", err);
+                });
+        }
+    </script>
+
+</body>
+
+</html>

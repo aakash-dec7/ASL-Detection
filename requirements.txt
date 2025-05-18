@@ -1,0 +1,10 @@
+nltk
+kaggle
+Flask
+datasets
+opencv-python
+numpy
+pandas
+scikit-learn
+dvc
+-e .
