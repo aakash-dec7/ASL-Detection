@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ASL Detection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -16,60 +17,69 @@
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
             padding: 2rem;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #fafafa;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #35042f, #290974);
             color: #333;
+            min-height: 100vh;
         }
 
         #camera,
         #prediction {
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background: transparent;
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 1.25rem;
+            box-shadow: 20px 20px 30px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        #camera:hover,
+        #prediction:hover {
+            transform: translateY(-5px);
         }
 
         h2 {
-            font-size: 1.5rem;
-            font-size: 2.0rem;
+            font-size: 2rem;
+            font-weight: 600;
             margin-bottom: 1rem;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            color: white;
         }
 
         video,
         img {
             width: 100%;
-            border-radius: 0.75rem;
-            border: 1px solid #ddd;
+            height: 60vh;
+            border-radius: 1rem;
+            border: 2px solid whitesmoke;
             margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            object-fit: cover;
         }
 
         button {
-            margin-top: 1rem;
-            padding: 0.75rem 1.5rem;
+            margin-top: 1.5rem;
+            padding: 0.85rem 2rem;
             font-size: 1rem;
-            background-color: #4f46e5;
+            font-weight: 600;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: #fff;
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             cursor: pointer;
-            transition: background-color 0.2s;
+            width: 100%;
+            transition: background 0.3s ease, transform 0.2s;
         }
 
         button:hover {
-            background-color: #4338ca;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            transform: scale(1.03);
         }
 
         #predictionText {
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-            color: black;
+            font-weight: 600;
+            color: white;
             text-align: left;
             transition: color 0.3s, text-align 0.3s;
-        }
-
-        .purpleRight {
-            color: rgb(98, 10, 213) !important;
-            text-align: center !important;
         }
     </style>
 </head>
@@ -82,8 +92,10 @@
     </div>
 
     <div id="prediction">
-        <h2 id="predictionText">Capture Image</h2>
-        <img id="capturedImage" src="" alt="Captured image will appear here">
+        <h2 id="predictionText">Prediction</h2>
+        <img id="capturedImage"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="
+            alt="Captured image will appear here">
     </div>
 
     <script>
@@ -91,18 +103,6 @@
         const predictionText = document.getElementById('predictionText');
         const capturedImage = document.getElementById('capturedImage');
 
-        // Update color and alignment based on content
-        function updatePredictionText(text) {
-            predictionText.innerText = text;
-
-            if (text !== "Capture Image") {
-                predictionText.classList.add('purpleRight');
-            } else {
-                predictionText.classList.remove('purpleRight');
-            }
-        }
-
-        // Access webcam
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(stream => {
                 video.srcObject = stream;
@@ -113,7 +113,6 @@
                 updatePredictionText("Camera access denied or not supported.");
             });
 
-        // Capture image from video and send to server
         function captureImage() {
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth;
@@ -131,7 +130,7 @@
             })
                 .then(res => res.json())
                 .then(data => {
-                    updatePredictionText(data.sign_prediction);
+                    predictionText.innerText = data.sign_prediction;
                 })
                 .catch(err => {
                     updatePredictionText("Prediction failed. Try again.");
@@ -139,7 +138,6 @@
                 });
         }
     </script>
-
 </body>
 
 </html>
