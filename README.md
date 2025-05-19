@@ -155,13 +155,11 @@ dvc init
 dvc repro
 ```
 
-The pipeline automatically starts the Flasj app at
+The pipeline automatically launches the Flask application at:
 
 ```text
 http://localhost:3000/
 ```
-
-The pipeline automatically launches the Flask application at:
 
 ## Conclusion
 
