@@ -119,7 +119,7 @@ The following values represent the training loss recorded at the end of each epo
 
 ## Model Evaluation Metrics
 
-The following results summarize the performance of the trained model, including its accuracy and average loss on the evaluation dataset:
+The following values represent the training loss recorded at the end of each of the 5 epochs, demonstrating the model's performance improvement over time:
 
 ```json
 {
