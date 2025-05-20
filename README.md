@@ -103,7 +103,7 @@ self.transform = transforms.Compose([
 
 ## Model Training Metrics
 
-The following values represent the training loss recorded at the end of each of the 5 epochs, demonstrating the model's performance improvement over time:
+The following values represent the training loss recorded at the end of 5 epochs, demonstrating the model’s performance improvement over time:
 
 ```json
 {
