@@ -1,6 +1,6 @@
 # American Sign Language Detection
 
-This repository implements an **American Sign Language (ASL)** detection system using a deep learning-based `Convolutional Neural Network (CNN)`. It is designed to classify input images of hand signs into one of 29 classes — the 26 letters of the English alphabet (`A-Z`), plus `SPACE`, `DELETE`, and `NOTHING`.
+This repository implements an **American Sign Language (ASL)** detection system using a deep learning-based `Convolutional Neural Network (CNN)`. It is designed to classify input images of hand signs into one of 29 classes - the 26 letters of the English alphabet (`A-Z`), plus `SPACE`, `DELETE`, and `NOTHING`.
 
 ## Model Architecture
 
